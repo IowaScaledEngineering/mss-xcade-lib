@@ -9,6 +9,7 @@
 #include "mss-wire-mux.h"
 #include "mss-gpio.h"
 #include "mss-signals.h"
+#include "mss-signal-mast.h"
 
 
 class XCade { 

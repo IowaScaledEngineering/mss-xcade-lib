@@ -58,6 +58,9 @@ void XCade::updateInputs()
 	this->wireMux->setPort(this->muxID);
 
 	uint16_t i = this->ioexDriverAB.read();
+
+//	Serial.printf("IOEX AB - 0x%04x\n", i);
+
 	this->mssPortA.setInputsBitmap(i & 0x0F);
 	this->mssPortB.setInputsBitmap((i>>8) & 0x0F);
 

@@ -40,4 +40,22 @@ typedef enum
 	SIGNAL_POL_END
 } SignalPolarity_t;
 
+typedef enum
+{
+	NOT_DIVERGING               = 0,
+	DIVERGING_HIGH_SPEED        = 1,
+	DIVERGING_LIMITED_SPEED     = 2,
+	DIVERGING_MEDIUM_SPEED      = 3,
+	DIVERGING_LOW_SPEED         = 4,
+	DIVERGING_END
+} DivergingRoute_t;
+
+typedef struct {
+	MSSPortIndication_t indication;
+	uint8_t divergingMask;
+	SignalAspect_t head1Aspect;
+	SignalAspect_t head2Aspect;
+	SignalAspect_t head3Aspect;
+} IndicationRule_t;
+
 #endif

@@ -1,3 +1,4 @@
+#include "Arduino.h"
 #include "mss-port.h"
 
 MSSPort::MSSPort()
@@ -17,6 +18,8 @@ void MSSPort::setLocalOccupancy(bool localOccupancy)
 
 MSSPortIndication_t MSSPort::indicationReceivedGet()
 {
+//	Serial.printf("Port - S=%d A=%d AA=%d DA=%d\n", this->S_in(), this->A_in(), this->AA_in(), this->DA_in());
+
 	if (this->S_out || this->S_in())
 		return INDICATION_STOP;
 	
@@ -38,6 +41,7 @@ MSSPortIndication_t MSSPort::indicationReceivedGet()
 MSSPortIndication_t MSSPort::indicationReceivedGet(bool localOccupancy)
 {
 	this->setLocalOccupancy(localOccupancy);
+
 
 	if (this->S_out || this->S_in())
 		return INDICATION_STOP;
@@ -119,8 +123,6 @@ uint8_t MSSPort::getOutputsBitmap()
 
 	return outputs;
 }
-
-#include "Arduino.h"
 
 void MSSPort::printDebugStr()
 {
