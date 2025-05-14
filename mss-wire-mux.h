@@ -9,7 +9,7 @@ class WireMux
 	public:
 		WireMux();
 		bool setPort(uint8_t muxPort, bool force=false);
-		bool begin(TwoWire* wire, int resetPin=-1);
+		bool begin(TwoWire* wire, int resetPin=35);
 		void reset();
 		uint8_t getPort();
 		TwoWire* getWire();

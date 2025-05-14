@@ -43,6 +43,10 @@ bool XCade::beginCommon()
 
 	this->gpio.begin(this->wireMux, this->muxID);
 	this->signals.begin(this->wireMux, this->muxID);
+
+	for(uint8_t i=0; i<4; i++)
+		this->updateInputs(); // Prime the debouncer
+
 	return true;
 }
 
