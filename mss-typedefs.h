@@ -25,4 +25,19 @@ typedef enum
 	INDICATION_END
 } MSSPortIndication_t;
 
+typedef enum
+{
+	SIGNAL_HEAD_THREE_LIGHT    = 0,
+	SIGNAL_HEAD_SEARCHLIGHT    = 1,
+	SIGNAL_HEAD_END
+} SignalHeadType_t;
+
+typedef enum
+{
+	SIGNAL_POL_BOARD_SENSING    = 0,
+	SIGNAL_POL_COMMON_ANODE     = 1,
+	SIGNAL_POL_COMMON_CATHODE   = 2,
+	SIGNAL_POL_END
+} SignalPolarity_t;
+
 #endif

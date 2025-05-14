@@ -23,7 +23,7 @@ void GPIO::doRead()
 	this->debouncedIn.debounce(this->ioex.read());
 }
 
-void GPIO::doWrite()
+void GPIO::updateOutputs()
 {
 	if (NULL == this->wireMux)
 		return;
@@ -99,7 +99,7 @@ void GPIO::digitalWrite(uint8_t gpioNum, uint8_t value, bool immediate)
 		this->out &= ~bitmask;
 
 	if (immediate)
-		this->doWrite();
+		this->updateOutputs();
 }
 
 bool GPIO::digitalRead(uint8_t gpioNum, bool immediate)

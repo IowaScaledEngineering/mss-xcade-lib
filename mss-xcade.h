@@ -8,7 +8,7 @@
 #include "mss-port.h"
 #include "mss-wire-mux.h"
 #include "mss-gpio.h"
-
+#include "mss-signals.h"
 
 
 class XCade { 
@@ -19,37 +19,21 @@ class XCade {
 		MSSPort mssPortC;
 		MSSPort mssPortD;
 		GPIO gpio;
-/*		SignalHead signalHeadA1;
-		SignalHead signalHeadA2;
-		SignalHead signalHeadB1;
-		SignalHead signalHeadB2;
-		SignalHead signalHeadC1;
-		SignalHead signalHeadC2;
-		SignalHead signalHeadD1;
-		SignalHead signalHeadD2;*/
+		SignalController signals;
 
-		bool begin(uint8_t muxID, TwoWire* wire = &Wire);
+		bool begin(TwoWire* wire = &Wire);
+		bool begin(WireMux* wireMux, uint8_t muxID=0);
 		void updateInputs();
 		void updateOutputs();
 
 	private:
-		TwoWire* wire;
+		bool beginCommon();
 		WireMux* wireMux;
 		uint8_t muxID;
-		WireMux masterWireMux; // Only used on XCade 0
+		WireMux masterWireMux; // Only used as a placeholder if no wiremux is passed in
 		PCA9555 ioexDriverAB;
 		PCA9555 ioexDriverCD;
 };
-/*
-void XCade::begin(uint8_t muxID)
-{
-  this->muxID = muxID;
-  i2cMuxSelectBoard(this->muxID);
-  pca9555_setup(&this->mss_AB, 0x20, 0x0F0F, 0x0000);
-  pca9555_setup(&this->mss_CD, 0x21, 0x0F0F, 0x0000);
-  pca9555_setup(&this->senseio, 0x22, 0xFFFF, 0x0000);
-	this->gpio.begin(&this->senseio, this->muxID);
-}
-*/
+
 
 #endif

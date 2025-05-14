@@ -19,21 +19,19 @@ class MSSPort {
 	public:
 		MSSPort();
 		void begin();
-		void updateOutputs();
-		void updateInputs(bool S_in, bool A_in, bool AA_in, bool DA_in);
-		void updateInputs(uint8_t mssRawInputsBitmask);
 
-
-		/*		MSSPortIndication_t indicationReceivedGet();
+		MSSPortIndication_t indicationReceivedGet();
 		MSSPortIndication_t indicationReceivedGet(bool localOccupancy);
-		void cascadeFrom(MSSPort& port, bool localOccupancy, bool diverging=false);
-		void cascadeFrom(MSSPortIndication_t indication, bool localOccupancy=false, bool diverging=false);
-		void localOccupancySet(bool localOccupancy);
-		void indicationSet();
+		void setLocalOccupancy(bool localOccupancy);
+		void cascadeFromPort(MSSPort& port, bool diverging=false);
+		void cascadeFromIndication(MSSPortIndication_t indication, bool diverging=false);
   
-		void importInputs(uint8_t inputRead);
-		uint8_t exportOutputs();*/
+		void getOutputs(bool &S_out, bool &A_out, bool &AA_out, bool &DA_out);
+		void setInputs(bool S_in, bool A_in, bool AA_in, bool DA_in);
 
+		uint8_t getOutputsBitmap();
+		void setInputsBitmap(uint8_t mssRawInputsBitmask);
+		void printDebugStr();
 	private:
 		Debouncer<uint8_t> debouncedInputs;
 		bool S_in();

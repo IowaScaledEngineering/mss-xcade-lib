@@ -91,8 +91,8 @@ uint8_t PCA9555::setDirection(uint16_t dir)
 	this->dir = dir;
 	this->wire->beginTransmission(this->addr);
 	this->wire->write(PCA9555_REG_DIRECTION0);
-	this->wire->write(this->out & 0xFF);
-	this->wire->write((this->out>>8) & 0xFF);
+	this->wire->write(this->dir & 0xFF);
+	this->wire->write((this->dir>>8) & 0xFF);
 	return (uint8_t)this->wire->endTransmission();  
 }
 

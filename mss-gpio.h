@@ -31,7 +31,7 @@ class GPIO
 		bool digitalRead(uint8_t gpioNum, bool immediate = false);
 		void invertInput(uint8_t gpioNum, bool inverted);
 		void doRead();
-		void doWrite();
+		void updateOutputs();
 
 	private:
 		WireMux* wireMux;

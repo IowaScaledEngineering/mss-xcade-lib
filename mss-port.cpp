@@ -10,14 +10,51 @@ void MSSPort::begin()
 	this->debouncedInputs.init(0);
 }
 
-void MSSPort::updateInputs(bool S_in, bool A_in, bool AA_in, bool DA_in)
+void MSSPort::setLocalOccupancy(bool localOccupancy)
 {
-	uint8_t mssRawInputsBitmask = 0;
-	mssRawInputsBitmask |= (S_in)?MSS_PORT_S_IN_MASK:0;
-	mssRawInputsBitmask |= (A_in)?MSS_PORT_A_IN_MASK:0;
-	mssRawInputsBitmask |= (AA_in)?MSS_PORT_AA_IN_MASK:0;
-	mssRawInputsBitmask |= (DA_in)?MSS_PORT_DA_IN_MASK:0;
-	this->debouncedInputs.debounce(mssRawInputsBitmask);
+	this->S_out = localOccupancy;
+}
+
+MSSPortIndication_t MSSPort::indicationReceivedGet()
+{
+	if (this->S_out || this->S_in())
+		return INDICATION_STOP;
+	
+	if (this->A_in() && !this->DA_in())
+		return INDICATION_APPROACH;
+
+	if (this->A_in() && this->DA_in())
+		return INDICATION_APPROACH_DIVERGING;
+
+	if (this->AA_in() && this->DA_in())
+		return INDICATION_APPROACH_DIVERGING_AA;
+
+	if (this->AA_in() && !this->DA_in())
+		return INDICATION_ADVANCE_APPROACH;
+
+	return INDICATION_CLEAR;
+}
+
+MSSPortIndication_t MSSPort::indicationReceivedGet(bool localOccupancy)
+{
+	this->setLocalOccupancy(localOccupancy);
+
+	if (this->S_out || this->S_in())
+		return INDICATION_STOP;
+	
+	if (this->A_in() && !this->DA_in())
+		return INDICATION_APPROACH;
+
+	if (this->A_in() && this->DA_in())
+		return INDICATION_APPROACH_DIVERGING;
+
+	if (this->AA_in() && this->DA_in())
+		return INDICATION_APPROACH_DIVERGING_AA;
+
+	if (this->AA_in() && !this->DA_in())
+		return INDICATION_ADVANCE_APPROACH;
+
+	return INDICATION_CLEAR;
 }
 
 bool MSSPort::S_in() 
@@ -40,20 +77,85 @@ bool MSSPort::DA_in()
 	return 0 != (this->debouncedInputs.getDebouncedState() & MSS_PORT_DA_IN_MASK);
 }
 
+void MSSPort::setInputs(bool S_in, bool A_in, bool AA_in, bool DA_in)
+{
+	uint8_t mssRawInputsBitmask = 0;
+	mssRawInputsBitmask |= (S_in)?MSS_PORT_S_IN_MASK:0;
+	mssRawInputsBitmask |= (A_in)?MSS_PORT_A_IN_MASK:0;
+	mssRawInputsBitmask |= (AA_in)?MSS_PORT_AA_IN_MASK:0;
+	mssRawInputsBitmask |= (DA_in)?MSS_PORT_DA_IN_MASK:0;
+	this->debouncedInputs.debounce(mssRawInputsBitmask);
+}
 
-void MSSPort::updateInputs(uint8_t mssRawInputsBitmask)
+void MSSPort::getOutputs(bool &S_out, bool &A_out, bool &AA_out, bool &DA_out)
+{
+	S_out = this->S_out;
+	A_out = this->A_out;
+	AA_out = this->AA_out;
+	if (this->DA_out && !this->A_out)
+		A_out = DA_out = true;	
+}
+
+void MSSPort::setInputsBitmap(uint8_t mssRawInputsBitmask)
 {
 	this->debouncedInputs.debounce(mssRawInputsBitmask);
 }
 
-void MSSPort::updateOutputs()
+uint8_t MSSPort::getOutputsBitmap()
 {
-/*	if (NULL == this->ioex)
-		return;
+	uint8_t outputs = 0;
 
-	this->ioex->write(this->bit_S_out, this->S_out, true);
-	this->ioex->write(this->bit_A_out, this->A_out, true);
-	this->ioex->write(this->bit_AA_out, this->AA_out, true);
-	this->ioex->write(this->bit_DA_out, this->DA_out, true);
-	this->ioex->writeDeferredValues();*/
+	if (this->S_out)
+		outputs |= MSS_PORT_S_OUT_MASK;
+
+	if (this->A_out)
+		outputs |= MSS_PORT_A_OUT_MASK;
+
+	if (this->AA_out)
+		outputs |= MSS_PORT_AA_OUT_MASK;
+
+	if (this->DA_out && !this->A_out)
+		outputs |= MSS_PORT_DA_OUT_MASK | MSS_PORT_A_OUT_MASK;
+
+	return outputs;
+}
+
+#include "Arduino.h"
+
+void MSSPort::printDebugStr()
+{
+	Serial.printf("Sin=%d Ain=%d AAin=%d DAin=%d\n Sout=%d Aout=%d AAout=%d DAout=%d", this->S_in(), this->A_in(), this->AA_in(), this->DA_in(), this->S_out, this->A_out, this->AA_out, this->DA_out);
+}
+
+
+void MSSPort::cascadeFromPort(MSSPort& port, bool diverging)
+{
+	this->A_out = port.S_in() || port.S_out;
+	this->AA_out = port.A_in();
+	this->DA_out = diverging;
+}
+
+void MSSPort::cascadeFromIndication(MSSPortIndication_t indication, bool diverging)
+{
+	this->AA_out = false;
+	this->A_out  = false;
+	this->DA_out = diverging;
+
+	switch(indication)
+	{
+		case INDICATION_STOP:
+			this->A_out = true;
+			break;
+
+		case INDICATION_APPROACH:
+		case INDICATION_APPROACH_DIVERGING:
+			this->AA_out = true;
+			break;
+
+		case INDICATION_APPROACH_DIVERGING_AA:
+		case INDICATION_ADVANCE_APPROACH:
+		case INDICATION_CLEAR:
+		default:
+			break;
+	}
 }
