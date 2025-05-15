@@ -42,11 +42,12 @@ typedef enum
 
 typedef enum
 {
-	NOT_DIVERGING               = 0,
-	DIVERGING_HIGH_SPEED        = 1,
-	DIVERGING_LIMITED_SPEED     = 2,
-	DIVERGING_MEDIUM_SPEED      = 3,
-	DIVERGING_LOW_SPEED         = 4,
+	NOT_SPECIFIED               = 0,
+	NOT_DIVERGING               = 1,
+	DIVERGING_FULL_SPEED        = 2,
+	DIVERGING_LIMITED_SPEED     = 3,
+	DIVERGING_MEDIUM_SPEED      = 4,
+	DIVERGING_LOW_SPEED         = 5,
 	DIVERGING_END
 } DivergingRoute_t;
 

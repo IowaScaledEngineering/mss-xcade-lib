@@ -91,13 +91,29 @@ void MSSPort::setInputs(bool S_in, bool A_in, bool AA_in, bool DA_in)
 	this->debouncedInputs.debounce(mssRawInputsBitmask);
 }
 
-void MSSPort::getOutputs(bool &S_out, bool &A_out, bool &AA_out, bool &DA_out)
+bool MSSPort::getDivergingOut()
 {
-	S_out = this->S_out;
-	A_out = this->A_out;
-	AA_out = this->AA_out;
+	return this->DA_out;
+}
+
+void MSSPort::getOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out)
+{
+	if (NULL != S_out)
+		*S_out = this->S_out;
+
+	if (NULL != A_out)
+		*A_out = this->A_out;
+
+	if (NULL != AA_out)
+		*AA_out = this->AA_out;
+
 	if (this->DA_out && !this->A_out)
-		A_out = DA_out = true;	
+	{
+		if (NULL != A_out)
+			*A_out = true;
+		if (NULL != DA_out)
+			*DA_out = true;	
+	}
 }
 
 void MSSPort::setInputsBitmap(uint8_t mssRawInputsBitmask)

@@ -18,7 +18,6 @@ void GPIO::doRead()
 {
 	if (NULL == this->wireMux)
 		return;
-
 	this->wireMux->setPort(this->muxID);
 	this->debouncedIn.debounce(this->ioex.read());
 }

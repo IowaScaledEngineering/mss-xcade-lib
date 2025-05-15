@@ -14,17 +14,17 @@ class SignalMast
 		void setSingleHeadRules(const IndicationRule_t* indicationRules, uint16_t indicationRulesLen);
 		void setDoubleHeadRules(const IndicationRule_t* indicationRules, uint16_t indicationRulesLen);
 
-		void setIndication(MSSPort& port, DivergingRoute_t diverging = NOT_DIVERGING, bool mastLit = true);
+		void setIndication(MSSPort& port, DivergingRoute_t diverging = NOT_SPECIFIED, bool mastLit = true);
 		void setIndication(MSSPortIndication_t indication, DivergingRoute_t diverging = NOT_DIVERGING, bool mastLit = true);
 
 		const static uint8_t DIVMASK_NOT_DIVERGING  = (1<<NOT_DIVERGING);
-		const static uint8_t DIVMASK_DIV_HIGH_SPD = (1<<DIVERGING_HIGH_SPEED);
+		const static uint8_t DIVMASK_DIV_FULL_SPD = (1<<DIVERGING_FULL_SPEED);
 		const static uint8_t DIVMASK_DIV_LTD_SPD = (1<<DIVERGING_LIMITED_SPEED);
 		const static uint8_t DIVMASK_DIV_MED_SPD = (1<<DIVERGING_MEDIUM_SPEED);
 		const static uint8_t DIVMASK_DIV_LOW_SPD = (1<<DIVERGING_LOW_SPEED);
-		const static uint8_t DIVMASK_ALL = (DIVMASK_NOT_DIVERGING | DIVMASK_DIV_HIGH_SPD | DIVMASK_DIV_LTD_SPD | DIVMASK_DIV_MED_SPD | DIVMASK_DIV_LOW_SPD);
-		const static uint8_t DIVMASK_ALL_DIVERGING = (DIVMASK_DIV_HIGH_SPD | DIVMASK_DIV_LTD_SPD | DIVMASK_DIV_MED_SPD | DIVMASK_DIV_LOW_SPD);
-		const static uint8_t DIVMASK_DIV_NO_HSPD = (DIVMASK_DIV_LTD_SPD | DIVMASK_DIV_MED_SPD | DIVMASK_DIV_LOW_SPD);
+		const static uint8_t DIVMASK_ALL = (DIVMASK_NOT_DIVERGING | DIVMASK_DIV_FULL_SPD | DIVMASK_DIV_LTD_SPD | DIVMASK_DIV_MED_SPD | DIVMASK_DIV_LOW_SPD);
+		const static uint8_t DIVMASK_ALL_DIVERGING = (DIVMASK_DIV_FULL_SPD | DIVMASK_DIV_LTD_SPD | DIVMASK_DIV_MED_SPD | DIVMASK_DIV_LOW_SPD);
+		const static uint8_t DIVMASK_DIV_NO_FULL = (DIVMASK_DIV_LTD_SPD | DIVMASK_DIV_MED_SPD | DIVMASK_DIV_LOW_SPD);
 
 
 	private:
