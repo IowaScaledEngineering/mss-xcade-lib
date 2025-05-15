@@ -33,6 +33,7 @@ SignalMast signalMastD;
 #define LOOP_UPDATE_TIME_MS 50
 #define I2C_SDA  36
 #define I2C_SCL  37
+#define RGB_LED_GPIO 45
 
 void setup() 
 {
@@ -83,7 +84,6 @@ void setup()
   signalMastB.addSignalHeads(&xcade.signals.B1, &xcade.signals.B2);
   signalMastC.addSignalHeads(&xcade.signals.C1, &xcade.signals.C2);
   signalMastD.addSignalHeads(&xcade.signals.D1);
-
 }
 
 void loop() 
@@ -99,6 +99,9 @@ void loop()
 
   // Update the last time we ran through the loop to the current time
   lastReadTime = currentTime;
+
+  // Just blink the RGB LED once a second in a nice dim of blue, so that we know the board is alive
+  rgbLedWrite(RGB_LED_GPIO, 0, 0, ((currentTime % 1000) > 500)?16:0);
 
   // This is our example track layout - a single crossover between double track
 
