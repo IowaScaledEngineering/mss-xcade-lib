@@ -10,6 +10,7 @@
 #include "mss-gpio.h"
 #include "mss-signals.h"
 #include "mss-signal-mast.h"
+#include "mss-config-sw.h"
 
 
 class XCade { 
@@ -21,6 +22,7 @@ class XCade {
 		MSSPort mssPortD;
 		GPIO gpio;
 		SignalController signals;
+		MSSConfigSwitches configSwitches;
 
 		bool begin(TwoWire* wire = &Wire);
 		bool begin(WireMux* wireMux, uint8_t muxID=0);

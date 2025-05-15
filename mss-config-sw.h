@@ -13,7 +13,7 @@ class MSSConfigSwitches {
 		uint8_t readRaw();
 		uint8_t readDebounced();
 		void update();
-		bool digitalRead(uint8_t switchNum);
+		bool getSwitch(uint8_t switchNum);
 	private:
 		Debouncer<uint8_t> debouncedInputs;
 };

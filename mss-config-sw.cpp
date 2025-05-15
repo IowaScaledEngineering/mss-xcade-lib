@@ -1,6 +1,6 @@
 #include "mss-config-sw.h"
 
-bool MSSConfigSwitches::digitalRead(uint8_t switchNum)
+bool MSSConfigSwitches::getSwitch(uint8_t switchNum)
 {
 	if (switchNum > 7)
 		return false;
@@ -21,32 +21,29 @@ void MSSConfigSwitches::update()
 uint8_t MSSConfigSwitches::readRaw()
 {
 	uint8_t retval = 0;
-	retval |= gpio_get_level(GPIO_NUM_14)?0x40:0;
-	retval |= gpio_get_level(GPIO_NUM_13)?0x20:0;
-	retval |= gpio_get_level(GPIO_NUM_12)?0x10:0;
-	retval |= gpio_get_level(GPIO_NUM_11)?0x08:0;
-	retval |= gpio_get_level(GPIO_NUM_10)?0x04:0;
-	retval |= gpio_get_level(GPIO_NUM_9)?0x02:0;
-	retval |= gpio_get_level(GPIO_NUM_21)?0x01:0;
+	retval |= digitalRead(9)?0:0x40;
+	retval |= digitalRead(10)?0:0x20;
+	retval |= digitalRead(11)?0:0x10;
+	retval |= digitalRead(12)?0:0x08;
+	retval |= digitalRead(13)?0:0x04;
+	retval |= digitalRead(14)?0:0x02;
+	retval |= digitalRead(21)?0:0x01;
 	return retval;
 }
 
+void MSSConfigSwitches::begin()
+{
+	pinMode(21, INPUT_PULLUP);
+	pinMode(14, INPUT_PULLUP);
+	pinMode(13, INPUT_PULLUP);
+	pinMode(12, INPUT_PULLUP);
+	pinMode(11, INPUT_PULLUP);
+	pinMode(10, INPUT_PULLUP);
+	pinMode(9, INPUT_PULLUP);
+	this->debouncedInputs.init(this->readRaw());
+}
 
 MSSConfigSwitches::MSSConfigSwitches()
 {
-	gpio_set_direction(GPIO_NUM_14, GPIO_MODE_INPUT);
-	gpio_set_pull_mode(GPIO_NUM_14, GPIO_PULLUP_ONLY);
-	gpio_set_direction(GPIO_NUM_13, GPIO_MODE_INPUT);
-	gpio_set_pull_mode(GPIO_NUM_13, GPIO_PULLUP_ONLY);
-	gpio_set_direction(GPIO_NUM_12, GPIO_MODE_INPUT);
-	gpio_set_pull_mode(GPIO_NUM_12, GPIO_PULLUP_ONLY);
-	gpio_set_direction(GPIO_NUM_11, GPIO_MODE_INPUT);
-	gpio_set_pull_mode(GPIO_NUM_11, GPIO_PULLUP_ONLY);
-	gpio_set_direction(GPIO_NUM_10, GPIO_MODE_INPUT);
-	gpio_set_pull_mode(GPIO_NUM_10, GPIO_PULLUP_ONLY);
-	gpio_set_direction(GPIO_NUM_9, GPIO_MODE_INPUT);
-	gpio_set_pull_mode(GPIO_NUM_9, GPIO_PULLUP_ONLY);
-	gpio_set_direction(GPIO_NUM_21, GPIO_MODE_INPUT);
-	gpio_set_pull_mode(GPIO_NUM_21, GPIO_PULLUP_ONLY);
-	this->debouncedInputs.init(this->readRaw());
+	this->debouncedInputs.init(0);
 }

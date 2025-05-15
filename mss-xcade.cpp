@@ -6,9 +6,6 @@ XCade::XCade()
 	this->muxID = 255;
 }
 
-
-
-
 bool XCade::begin(TwoWire* wire)
 {
 	this->masterWireMux.begin(wire);
@@ -32,7 +29,11 @@ bool XCade::beginCommon()
 	// Select this XCade on the I2C bus mux
 	this->wireMux->setPort(this->muxID);
 
-	// Initialize the three TCA9555 GPIO drivers
+	// Update the config switches if this is board 0
+	if (0 == this->wireMux->getPort())
+		this->configSwitches.begin();
+
+		// Initialize the three TCA9555 GPIO drivers
 	this->ioexDriverAB.begin(0x20, this->wireMux->getWire(), 0x0F0F, 0x0000);
 	this->ioexDriverCD.begin(0x21, this->wireMux->getWire(), 0x0F0F, 0x0000);
 
@@ -74,6 +75,10 @@ void XCade::updateInputs()
 	
 	// Update GPIO debouncer
 	this->gpio.doRead();
+
+	// Update the config switches if this is board 0
+	if (0 == this->wireMux->getPort())
+		this->configSwitches.update();
 }
 
 void XCade::updateOutputs()
