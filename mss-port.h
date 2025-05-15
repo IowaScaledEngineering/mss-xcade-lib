@@ -29,6 +29,8 @@ class MSSPort {
 		void getOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out);
 		void setInputs(bool S_in, bool A_in, bool AA_in, bool DA_in);
 		bool getDivergingOut();
+		bool getSingleBlockApproach();
+		bool getDoubleBlockApproach();
 		uint8_t getOutputsBitmap();
 		void setInputsBitmap(uint8_t mssRawInputsBitmask);
 		void printDebugStr();

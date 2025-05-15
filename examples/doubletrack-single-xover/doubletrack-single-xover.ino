@@ -138,11 +138,11 @@ void loop()
 	if (!turnoutACThrown && !turnoutBDThrown)
 	{
 		// If both turnouts are normal (input low), then just cascade through the appropriate signals
-    xcade.mssPortA.setLocalOccupancy(blockAOccupancy | irACOccupancy);
-    xcade.mssPortC.setLocalOccupancy(blockCOccupancy | irACOccupancy);
+    xcade.mssPortA.setLocalOccupancy(blockAOccupancy || irACOccupancy);
+    xcade.mssPortC.setLocalOccupancy(blockCOccupancy || irACOccupancy);
 
-    xcade.mssPortB.setLocalOccupancy(blockBOccupancy | irBDOccupancy);
-    xcade.mssPortD.setLocalOccupancy(blockDOccupancy | irBDOccupancy);
+    xcade.mssPortB.setLocalOccupancy(blockBOccupancy || irBDOccupancy);
+    xcade.mssPortD.setLocalOccupancy(blockDOccupancy || irBDOccupancy);
 
     // Cascade MSS bus from A->C and C->A
 	  xcade.mssPortA.cascadeFromPort(xcade.mssPortC);
@@ -176,8 +176,8 @@ void loop()
 
     // B and C are connected via the crossover and either IR sensor may be tripped
     //  at the boundary to hold down occupancy in both
-    xcade.mssPortC.setLocalOccupancy(blockCOccupancy | irACOccupancy | irBDOccupancy);
-    xcade.mssPortB.setLocalOccupancy(blockBOccupancy | irACOccupancy | irBDOccupancy);
+    xcade.mssPortC.setLocalOccupancy(blockCOccupancy || irACOccupancy || irBDOccupancy);
+    xcade.mssPortB.setLocalOccupancy(blockBOccupancy || irACOccupancy || irBDOccupancy);
 
     // Send stop indications out on A and D
 		xcade.mssPortA.cascadeFromIndication(INDICATION_STOP);
@@ -198,10 +198,10 @@ void loop()
 
 		// If both turnouts are normal (input low), then just cascade through the appropriate signals
     xcade.mssPortA.setLocalOccupancy(blockAOccupancy);
-    xcade.mssPortC.setLocalOccupancy(blockCOccupancy | irACOccupancy);
+    xcade.mssPortC.setLocalOccupancy(blockCOccupancy || irACOccupancy);
 
-    xcade.mssPortB.setLocalOccupancy(blockBOccupancy | irBDOccupancy);
-    xcade.mssPortD.setLocalOccupancy(blockDOccupancy | irBDOccupancy);
+    xcade.mssPortB.setLocalOccupancy(blockBOccupancy || irBDOccupancy);
+    xcade.mssPortD.setLocalOccupancy(blockDOccupancy || irBDOccupancy);
 
     // Send stop indications out on A and C, and send diverging on C
 		xcade.mssPortA.cascadeFromIndication(INDICATION_STOP);
@@ -231,10 +231,10 @@ void loop()
     //	    BD=S4   IR=S5    BD=S6
 
 		// If both turnouts are normal (input low), then just cascade through the appropriate signals
-    xcade.mssPortA.setLocalOccupancy(blockAOccupancy | irACOccupancy);
-    xcade.mssPortC.setLocalOccupancy(blockCOccupancy | irACOccupancy);
+    xcade.mssPortA.setLocalOccupancy(blockAOccupancy || irACOccupancy);
+    xcade.mssPortC.setLocalOccupancy(blockCOccupancy || irACOccupancy);
 
-    xcade.mssPortB.setLocalOccupancy(blockBOccupancy | irBDOccupancy);
+    xcade.mssPortB.setLocalOccupancy(blockBOccupancy || irBDOccupancy);
     xcade.mssPortD.setLocalOccupancy(blockDOccupancy);
 
     // Send stop indications out on A and C, and send diverging on C

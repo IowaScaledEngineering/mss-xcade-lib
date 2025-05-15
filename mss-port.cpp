@@ -96,6 +96,17 @@ bool MSSPort::getDivergingOut()
 	return this->DA_out;
 }
 
+bool MSSPort::getSingleBlockApproach()
+{
+	return this->S_in() || this->S_out;
+}
+
+bool MSSPort::getDoubleBlockApproach()
+{
+	return this->S_in() || this->S_out || (this->A_in() && !this->DA_in());
+}
+
+
 void MSSPort::getOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out)
 {
 	if (NULL != S_out)
