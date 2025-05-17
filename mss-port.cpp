@@ -23,16 +23,17 @@ MSSPortIndication_t MSSPort::indicationReceivedGet()
 	if (this->S_out || this->S_in())
 		return INDICATION_STOP;
 	
-	if (this->A_in() && !this->DA_in())
-		return INDICATION_APPROACH;
-
 	if (this->A_in() && this->DA_in() && !this->DA_out)
 		return INDICATION_APPROACH_DIVERGING;
+
+	if (this->A_in())
+		return INDICATION_APPROACH;
+
 
 	if (this->AA_in() && this->DA_in() && !this->DA_out)
 		return INDICATION_APPROACH_DIVERGING_AA;
 
-	if (this->AA_in() && !this->DA_in())
+	if (this->AA_in())
 		return INDICATION_ADVANCE_APPROACH;
 
 	return INDICATION_CLEAR;
@@ -45,17 +46,17 @@ MSSPortIndication_t MSSPort::indicationReceivedGet(bool localOccupancy)
 
 	if (this->S_out || this->S_in())
 		return INDICATION_STOP;
-	
-	if (this->A_in() && !this->DA_in())
-		return INDICATION_APPROACH;
 
 	if (this->A_in() && this->DA_in() && !this->DA_out)
 		return INDICATION_APPROACH_DIVERGING;
 
+	if (this->A_in())
+		return INDICATION_APPROACH;
+
 	if (this->AA_in() && this->DA_in() && !this->DA_out)
 		return INDICATION_APPROACH_DIVERGING_AA;
 
-	if (this->AA_in() && !this->DA_in())
+	if (this->AA_in())
 		return INDICATION_ADVANCE_APPROACH;
 
 	return INDICATION_CLEAR;
