@@ -12,6 +12,9 @@
 #include "mss-signal-mast.h"
 #include "mss-config-sw.h"
 
+#define XCADE_I2C_SDA  36
+#define XCADE_I2C_SCL  37
+#define XCADE_RGB_LED  45
 
 class XCade { 
 	public:

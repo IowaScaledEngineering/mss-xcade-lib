@@ -66,12 +66,12 @@ void XCade::updateInputs()
 
 //	Serial.printf("IOEX AB - 0x%04x\n", i);
 
-	this->mssPortA.setInputsBitmap(i & 0x0F);
-	this->mssPortB.setInputsBitmap((i>>8) & 0x0F);
+	this->mssPortA.updateInputs(i & 0x0F);
+	this->mssPortB.updateInputs((i>>8) & 0x0F);
 
 	i = this->ioexDriverCD.read();
-	this->mssPortC.setInputsBitmap(i & 0x0F);
-	this->mssPortD.setInputsBitmap((i>>8) & 0x0F);
+	this->mssPortC.updateInputs(i & 0x0F);
+	this->mssPortD.updateInputs((i>>8) & 0x0F);
 	
 	// Update GPIO debouncer
 	this->gpio.doRead();
@@ -89,10 +89,10 @@ void XCade::updateOutputs()
 	// MSS_PORT_S_IN_MASK   0x04
 	// MSS_PORT_DA_IN_MASK  0x08
 
-	uint16_t i = this->mssPortA.getOutputsBitmap() | ((uint16_t)this->mssPortB.getOutputsBitmap()<<8);
+	uint16_t i = this->mssPortA.updateOutputs() | ((uint16_t)this->mssPortB.updateOutputs()<<8);
 	this->ioexDriverAB.write(i);
 
-	i = this->mssPortC.getOutputsBitmap() | ((uint16_t)this->mssPortD.getOutputsBitmap()<<8);
+	i = this->mssPortC.updateOutputs() | ((uint16_t)this->mssPortD.updateOutputs()<<8);
 	this->ioexDriverCD.write(i);
 
 	this->gpio.updateOutputs();

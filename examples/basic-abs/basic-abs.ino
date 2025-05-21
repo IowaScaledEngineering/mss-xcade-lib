@@ -29,8 +29,6 @@ SignalMast signalMastA;
 SignalMast signalMastB;
 
 #define LOOP_UPDATE_TIME_MS 50
-#define I2C_SDA  36
-#define I2C_SCL  37
 
 void setup() 
 {
@@ -40,7 +38,7 @@ void setup()
   // Start the I2C/Wire interface.  This is how the host processor talks to everything on the xcade board.
   //  Also must be started before setting up the WireMux object - described below - because the mux is also
   //  configured over I2C
-  Wire.setPins(I2C_SDA, I2C_SCL);
+  Wire.setPins(XCADE_I2C_SDA, XCADE_I2C_SCL);
   Wire.setClock(100000);
   Wire.begin();
 

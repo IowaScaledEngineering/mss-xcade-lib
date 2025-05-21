@@ -16,6 +16,15 @@ void MSSPort::setLocalOccupancy(bool localOccupancy)
 	this->S_out = localOccupancy;
 }
 
+bool MSSPort::DA_mask()
+{
+  // The purpose of this function is to see if we've asserted DA_out within the
+  //  cycle count of the debouncer.  If we have, then DA_in is unreliable and should
+  //  not be used.
+
+  return (this->DA_out || (0 != (this->debouncedInputs.getDebouncedState() & MSS_PORT_DA_OUT_MASK)));
+}
+
 MSSPortIndication_t MSSPort::indicationReceivedGet()
 {
 //	Serial.printf("Port - S=%d A=%d AA=%d DA=%d\n", this->S_in(), this->A_in(), this->AA_in(), this->DA_in());
@@ -23,37 +32,13 @@ MSSPortIndication_t MSSPort::indicationReceivedGet()
 	if (this->S_out || this->S_in())
 		return INDICATION_STOP;
 	
-	if (this->A_in() && this->DA_in() && !this->DA_out)
+	if (this->A_in() && this->DA_in() && !this->DA_mask())
 		return INDICATION_APPROACH_DIVERGING;
 
 	if (this->A_in())
 		return INDICATION_APPROACH;
 
-
-	if (this->AA_in() && this->DA_in() && !this->DA_out)
-		return INDICATION_APPROACH_DIVERGING_AA;
-
-	if (this->AA_in())
-		return INDICATION_ADVANCE_APPROACH;
-
-	return INDICATION_CLEAR;
-}
-
-MSSPortIndication_t MSSPort::indicationReceivedGet(bool localOccupancy)
-{
-	this->setLocalOccupancy(localOccupancy);
-
-
-	if (this->S_out || this->S_in())
-		return INDICATION_STOP;
-
-	if (this->A_in() && this->DA_in() && !this->DA_out)
-		return INDICATION_APPROACH_DIVERGING;
-
-	if (this->A_in())
-		return INDICATION_APPROACH;
-
-	if (this->AA_in() && this->DA_in() && !this->DA_out)
+	if (this->AA_in() && this->DA_in() && !this->DA_mask())
 		return INDICATION_APPROACH_DIVERGING_AA;
 
 	if (this->AA_in())
@@ -82,13 +67,14 @@ bool MSSPort::DA_in()
 	return 0 != (this->debouncedInputs.getDebouncedState() & MSS_PORT_DA_IN_MASK);
 }
 
-void MSSPort::setInputs(bool S_in, bool A_in, bool AA_in, bool DA_in)
+void MSSPort::setRawInputs(bool S_in, bool A_in, bool AA_in, bool DA_in)
 {
 	uint8_t mssRawInputsBitmask = 0;
 	mssRawInputsBitmask |= (S_in)?MSS_PORT_S_IN_MASK:0;
 	mssRawInputsBitmask |= (A_in)?MSS_PORT_A_IN_MASK:0;
 	mssRawInputsBitmask |= (AA_in)?MSS_PORT_AA_IN_MASK:0;
 	mssRawInputsBitmask |= (DA_in)?MSS_PORT_DA_IN_MASK:0;
+  mssRawInputsBitmask |= (this->DA_out)?MSS_PORT_DA_OUT_MASK:0;
 	this->debouncedInputs.debounce(mssRawInputsBitmask);
 }
 
@@ -108,7 +94,7 @@ bool MSSPort::getDoubleBlockApproach()
 }
 
 
-void MSSPort::getOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out)
+void MSSPort::getRawOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out)
 {
 	if (NULL != S_out)
 		*S_out = this->S_out;
@@ -128,12 +114,12 @@ void MSSPort::getOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out)
 	}
 }
 
-void MSSPort::setInputsBitmap(uint8_t mssRawInputsBitmask)
+void MSSPort::updateInputs(uint8_t mssRawInputsBitmask)
 {
 	this->debouncedInputs.debounce(mssRawInputsBitmask);
 }
 
-uint8_t MSSPort::getOutputsBitmap()
+uint8_t MSSPort::updateOutputs()
 {
 	uint8_t outputs = 0;
 

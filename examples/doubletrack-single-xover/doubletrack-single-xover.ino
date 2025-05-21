@@ -31,9 +31,6 @@ SignalMast signalMastC;
 SignalMast signalMastD;
 
 #define LOOP_UPDATE_TIME_MS 50
-#define I2C_SDA  36
-#define I2C_SCL  37
-#define RGB_LED_GPIO 45
 
 void setup() 
 {
@@ -43,7 +40,7 @@ void setup()
   // Start the I2C/Wire interface.  This is how the host processor talks to everything on the xcade board.
   //  Also must be started before setting up the WireMux object - described below - because the mux is also
   //  configured over I2C
-  Wire.setPins(I2C_SDA, I2C_SCL);
+  Wire.setPins(XCADE_I2C_SDA, XCADE_I2C_SCL);
   Wire.setClock(100000);
   Wire.begin();
 
@@ -101,7 +98,7 @@ void loop()
   lastReadTime = currentTime;
 
   // Just blink the RGB LED once a second in a nice dim of blue, so that we know the board is alive
-  rgbLedWrite(RGB_LED_GPIO, 0, 0, ((currentTime % 1000) > 500)?16:0);
+  rgbLedWrite(XCADE_RGB_LED, 0, 0, ((currentTime % 1000) > 500)?16:0);
 
   // This is our example track layout - a single crossover between double track
 

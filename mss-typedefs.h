@@ -47,7 +47,7 @@ typedef enum
 	DIVERGING_FULL_SPEED        = 2,
 	DIVERGING_LIMITED_SPEED     = 3,
 	DIVERGING_MEDIUM_SPEED      = 4,
-	DIVERGING_LOW_SPEED         = 5,
+	DIVERGING_SLOW_SPEED        = 5,
 	DIVERGING_END
 } DivergingRoute_t;
 

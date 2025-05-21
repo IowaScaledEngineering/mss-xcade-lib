@@ -21,18 +21,22 @@ class MSSPort {
 		void begin();
 
 		MSSPortIndication_t indicationReceivedGet();
-		MSSPortIndication_t indicationReceivedGet(bool localOccupancy);
 		void setLocalOccupancy(bool localOccupancy);
 		void cascadeFromPort(MSSPort& port, bool diverging=false);
 		void cascadeFromIndication(MSSPortIndication_t indication, bool diverging=false);
   
-		void getOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out);
-		void setInputs(bool S_in, bool A_in, bool AA_in, bool DA_in);
+		void getRawOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out);
+		void setRawInputs(bool S_in, bool A_in, bool AA_in, bool DA_in);
+
 		bool getDivergingOut();
 		bool getSingleBlockApproach();
 		bool getDoubleBlockApproach();
-		uint8_t getOutputsBitmap();
-		void setInputsBitmap(uint8_t mssRawInputsBitmask);
+
+
+		// DANGER!  These are really only for XCade object to call within its own 
+		//  updateInputs and updateOutputs routines.  Don't use them.
+		uint8_t updateOutputs();
+		void updateInputs(uint8_t mssRawInputsBitmask);
 		void printDebugStr();
 	private:
 		Debouncer<uint8_t> debouncedInputs;
@@ -40,12 +44,11 @@ class MSSPort {
 		bool A_in();
 		bool AA_in();
 		bool DA_in();
-
+		bool DA_mask();
 		bool S_out;
 		bool A_out;
 		bool AA_out;
 		bool DA_out;
-
 };
 
 
