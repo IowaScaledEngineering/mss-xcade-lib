@@ -18,11 +18,11 @@ void MSSPort::setLocalOccupancy(bool localOccupancy)
 
 bool MSSPort::DA_mask()
 {
-  // The purpose of this function is to see if we've asserted DA_out within the
-  //  cycle count of the debouncer.  If we have, then DA_in is unreliable and should
-  //  not be used.
+	// The purpose of this function is to see if we've asserted DA_out within the
+	//  cycle count of the debouncer.  If we have, then DA_in is unreliable and should
+	//  not be used.
 
-  return (this->DA_out || (0 != (this->debouncedInputs.getDebouncedState() & MSS_PORT_DA_OUT_MASK)));
+	return (this->DA_out || (0 != (this->debouncedInputs.getDebouncedState() & MSS_PORT_DA_OUT_MASK)));
 }
 
 MSSPortIndication_t MSSPort::indicationReceivedGet()
@@ -74,7 +74,7 @@ void MSSPort::setRawInputs(bool S_in, bool A_in, bool AA_in, bool DA_in)
 	mssRawInputsBitmask |= (A_in)?MSS_PORT_A_IN_MASK:0;
 	mssRawInputsBitmask |= (AA_in)?MSS_PORT_AA_IN_MASK:0;
 	mssRawInputsBitmask |= (DA_in)?MSS_PORT_DA_IN_MASK:0;
-  mssRawInputsBitmask |= (this->DA_out)?MSS_PORT_DA_OUT_MASK:0;
+	mssRawInputsBitmask |= (this->DA_out)?MSS_PORT_DA_OUT_MASK:0;
 	this->debouncedInputs.debounce(mssRawInputsBitmask);
 }
 
@@ -140,38 +140,38 @@ uint8_t MSSPort::updateOutputs()
 
 void MSSPort::printDebugStr()
 {
-  const char* indicationName = "UNKNOWN";
-  switch(this->indicationReceivedGet())
-  {
-    case INDICATION_STOP:
-      indicationName = "STOP";
-      break;
+	const char* indicationName = "UNKNOWN";
+	switch(this->indicationReceivedGet())
+	{
+		case INDICATION_STOP:
+			indicationName = "STOP";
+			break;
 
-    case INDICATION_APPROACH_DIVERGING:
-      indicationName = "APPROACH_DIV";
-      break;
+		case INDICATION_APPROACH_DIVERGING:
+			indicationName = "APPR_DIV";
+			break;
 
-    case INDICATION_APPROACH:
-      indicationName = "APPROACH";
-      break;
+		case INDICATION_APPROACH:
+			indicationName = "APPR";
+			break;
 
-    case INDICATION_APPROACH_DIVERGING_AA:
-      indicationName = "APPROACH_DIV";
-      break;
+		case INDICATION_APPROACH_DIVERGING_AA:
+			indicationName = "AA_DIV";
+			break;
 
-    case INDICATION_ADVANCE_APPROACH:
-      indicationName = "ADV_APPROACH";
-      break;
+		case INDICATION_ADVANCE_APPROACH:
+			indicationName = "ADV_APPR";
+			break;
 
-    case INDICATION_CLEAR:
-      indicationName = "CLEAR";
-      break;
+		case INDICATION_CLEAR:
+			indicationName = "CLEAR";
+			break;
 
-    default:
-      break;
-   }
+		default:
+			break;
+	 }
 
-	Serial.printf("[%-12.12s] Sin=%d Ain=%d AAin=%d DAin=%d Sout=%d Aout=%d AAout=%d DAout=%d", indicationName, this->S_in(), this->A_in(), this->AA_in(), this->DA_in(), this->S_out, this->A_out, this->AA_out, this->DA_out);
+	Serial.printf("[%-8.8s] Sin=%d Ain=%d AAin=%d DAin=%d Sout=%d Aout=%d AAout=%d DAout=%d", indicationName, this->S_in(), this->A_in(), this->AA_in(), this->DA_in(), this->S_out, this->A_out, this->AA_out, this->DA_out);
 }
 
 
