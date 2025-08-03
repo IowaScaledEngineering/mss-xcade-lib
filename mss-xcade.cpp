@@ -89,11 +89,15 @@ void XCade::updateOutputs()
 	// MSS_PORT_S_IN_MASK   0x04
 	// MSS_PORT_DA_IN_MASK  0x08
 
+	this->wireMux->setPort(this->muxID);
+
 	uint16_t i = this->mssPortA.updateOutputs() | ((uint16_t)this->mssPortB.updateOutputs()<<8);
-	this->ioexDriverAB.write(i);
+//  Serial.printf("ioexAB - 0x%04X", i);
+  this->ioexDriverAB.write(i);
 
 	i = this->mssPortC.updateOutputs() | ((uint16_t)this->mssPortD.updateOutputs()<<8);
 	this->ioexDriverCD.write(i);
+//  Serial.printf("  ioexCD - 0x%04X\n", i);
 
 	this->gpio.updateOutputs();
 	this->signals.updateOutputs();
