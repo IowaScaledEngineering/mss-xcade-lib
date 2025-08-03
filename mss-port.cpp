@@ -140,7 +140,38 @@ uint8_t MSSPort::updateOutputs()
 
 void MSSPort::printDebugStr()
 {
-	Serial.printf("Sin=%d Ain=%d AAin=%d DAin=%d\n Sout=%d Aout=%d AAout=%d DAout=%d", this->S_in(), this->A_in(), this->AA_in(), this->DA_in(), this->S_out, this->A_out, this->AA_out, this->DA_out);
+  const char* indicationName = "UNKNOWN";
+  switch(this->indicationReceivedGet())
+  {
+    case INDICATION_STOP:
+      indicationName = "STOP";
+      break;
+
+    case INDICATION_APPROACH_DIVERGING:
+      indicationName = "APPROACH_DIV";
+      break;
+
+    case INDICATION_APPROACH:
+      indicationName = "APPROACH";
+      break;
+
+    case INDICATION_APPROACH_DIVERGING_AA:
+      indicationName = "APPROACH_DIV";
+      break;
+
+    case INDICATION_ADVANCE_APPROACH:
+      indicationName = "ADV_APPROACH";
+      break;
+
+    case INDICATION_CLEAR:
+      indicationName = "CLEAR";
+      break;
+
+    default:
+      break;
+   }
+
+	Serial.printf("[%-12.12s] Sin=%d Ain=%d AAin=%d DAin=%d Sout=%d Aout=%d AAout=%d DAout=%d", indicationName, this->S_in(), this->A_in(), this->AA_in(), this->DA_in(), this->S_out, this->A_out, this->AA_out, this->DA_out);
 }
 
 
