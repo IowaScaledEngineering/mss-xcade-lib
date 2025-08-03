@@ -124,9 +124,6 @@ SignalMast::SignalMast(SignalHead* h1, SignalHead* h2, SignalHead* h3)
 
 void SignalMast::setIndication(MSSPort& port, DivergingRoute_t diverging, bool mastLit)
 {
-	if (NOT_SPECIFIED == diverging)
-		diverging =  port.getDivergingOut()?DIVERGING_FULL_SPEED:NOT_DIVERGING;
-
 	this->setIndication(port.indicationReceivedGet(), diverging, mastLit);
 }
 
