@@ -94,6 +94,9 @@ void SignalMast::setDefaultSignalRules()
 	this->singleHeadRuleLen = sizeof(singleHead4Indication) / sizeof(IndicationRule_t);
 	this->doubleHeadRules = doubleHead4IndicationWesternUS;
 	this->doubleHeadRuleLen = sizeof(doubleHead4IndicationWesternUS) / sizeof(IndicationRule_t);
+	this->tripleHeadRules = tripleHead4Indication;
+	this->tripleHeadRuleLen = sizeof(tripleHead4Indication) / sizeof(IndicationRule_t);
+
 }
 
 void SignalMast::setSingleHeadRules(const IndicationRule_t* indicationRules, uint16_t indicationRulesLen)
@@ -138,10 +141,10 @@ void SignalMast::setIndication(MSSPortIndication_t indication, DivergingRoute_t 
 	{
 		rulesLen = this->singleHeadRuleLen;
 		rulesPtr = this->singleHeadRules;
-	} else if (NULL != h1 && NULL != h2 && NULL == h3) {
+	} else if (NULL != this->h1 && NULL != this->h2 && NULL == this->h3) {
 		rulesLen = this->doubleHeadRuleLen;
 		rulesPtr = this->doubleHeadRules;
-	} else if (NULL != h1 && NULL != h2 && NULL != h3) {
+	} else if (NULL != this->h1 && NULL != this->h2 && NULL != this->h3) {
 		rulesLen = this->tripleHeadRuleLen;
 		rulesPtr = this->tripleHeadRules;
 	} else {
