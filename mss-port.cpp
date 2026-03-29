@@ -147,6 +147,10 @@ void MSSPort::printDebugStr()
 			indicationName = "STOP";
 			break;
 
+		case INDICATION_RESTRICTING:
+			indicationName = "RESTRICT";
+			break;
+
 		case INDICATION_APPROACH_DIVERGING:
 			indicationName = "APPR_DIV";
 			break;
@@ -191,6 +195,7 @@ void MSSPort::cascadeFromIndication(MSSPortIndication_t indication, bool divergi
 	switch(indication)
 	{
 		case INDICATION_STOP:
+		case INDICATION_RESTRICTING:
 			this->A_out = true;
 			break;
 
