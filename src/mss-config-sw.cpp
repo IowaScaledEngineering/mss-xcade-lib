@@ -2,10 +2,10 @@
 
 bool MSSConfigSwitches::getSwitch(uint8_t switchNum)
 {
-	if (switchNum > 7)
+	if (switchNum > 7 || 0 == switchNum)
 		return false;
 
-	return 0 != ((1<<switchNum) & this->debouncedInputs.getDebouncedState());
+	return 0 != ((1<<(switchNum-1)) & this->debouncedInputs.getDebouncedState());
 }
 
 uint8_t MSSConfigSwitches::readDebounced()

@@ -10,6 +10,34 @@ SignalAspect_t SignalHead::getAspect()
 	return this->aspect;
 }
 
+const char* SignalHead::getAspectText()
+{
+	SignalAspect_t aspect = this->getAspect();
+
+	switch(aspect)
+	{
+		case ASPECT_OFF:
+			return "OFF";
+		case ASPECT_GREEN:
+			return "GRN";
+		case ASPECT_FL_GREEN:
+			return "F-GRN";
+		case ASPECT_YELLOW:
+			return "YLW";
+		case ASPECT_FL_YELLOW:
+			return "F-YLW";
+		case ASPECT_RED:
+			return "RED";
+		case ASPECT_FL_RED:
+			return "F-RED";
+		case ASPECT_LUNAR:
+			return "LNR";
+		default:
+			return "UNK";
+	}
+}
+
+
 SignalHead::SignalHead() 
 {
 	this->aspect = ASPECT_OFF;

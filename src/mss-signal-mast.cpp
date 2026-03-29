@@ -3,6 +3,7 @@
 const static IndicationRule_t singleHead4Indication[] = 
 {
 	{ INDICATION_STOP,                  SignalMast::DIVMASK_ALL, ASPECT_RED,       ASPECT_OFF,       ASPECT_OFF       },
+	{ INDICATION_RESTRICTING,           SignalMast::DIVMASK_ALL, ASPECT_FL_RED,    ASPECT_OFF,       ASPECT_OFF       },
 	{ INDICATION_APPROACH,              SignalMast::DIVMASK_ALL, ASPECT_YELLOW,    ASPECT_OFF,       ASPECT_OFF       },
 	{ INDICATION_APPROACH_DIVERGING,    SignalMast::DIVMASK_ALL, ASPECT_YELLOW,    ASPECT_OFF,       ASPECT_OFF       },
 	{ INDICATION_ADVANCE_APPROACH,      SignalMast::DIVMASK_ALL, ASPECT_FL_YELLOW, ASPECT_OFF,       ASPECT_OFF       },
@@ -13,6 +14,7 @@ const static IndicationRule_t singleHead4Indication[] =
 const static IndicationRule_t singleHead3Indication[] = 
 {
 	{ INDICATION_STOP,                  SignalMast::DIVMASK_ALL, ASPECT_RED,       ASPECT_OFF,       ASPECT_OFF       },
+	{ INDICATION_RESTRICTING,           SignalMast::DIVMASK_ALL, ASPECT_FL_RED,    ASPECT_OFF,       ASPECT_OFF       },
 	{ INDICATION_APPROACH,              SignalMast::DIVMASK_ALL, ASPECT_YELLOW,    ASPECT_OFF,       ASPECT_OFF       },
 	{ INDICATION_APPROACH_DIVERGING,    SignalMast::DIVMASK_ALL, ASPECT_YELLOW,    ASPECT_OFF,       ASPECT_OFF       },
 	{ INDICATION_ADVANCE_APPROACH,      SignalMast::DIVMASK_ALL, ASPECT_GREEN,     ASPECT_OFF,       ASPECT_OFF       },
@@ -23,6 +25,7 @@ const static IndicationRule_t singleHead3Indication[] =
 const static IndicationRule_t doubleHead4IndicationWesternUS[] = 
 {
 	{ INDICATION_STOP,                  SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_RED,       ASPECT_RED,       ASPECT_OFF       },
+	{ INDICATION_RESTRICTING,           SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_FL_RED,    ASPECT_RED,       ASPECT_OFF       },	
 	{ INDICATION_APPROACH,              SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_YELLOW,    ASPECT_RED,       ASPECT_OFF       },
 	{ INDICATION_APPROACH_DIVERGING,    SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_YELLOW,    ASPECT_YELLOW,    ASPECT_OFF       },
 	{ INDICATION_ADVANCE_APPROACH,      SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_FL_YELLOW, ASPECT_RED,       ASPECT_OFF       },
@@ -30,6 +33,7 @@ const static IndicationRule_t doubleHead4IndicationWesternUS[] =
 	{ INDICATION_CLEAR,                 SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_GREEN,     ASPECT_RED,       ASPECT_OFF       },
 
 	{ INDICATION_STOP,                  SignalMast::DIVMASK_ALL_DIVERGING, ASPECT_RED,       ASPECT_RED,       ASPECT_OFF       },
+	{ INDICATION_RESTRICTING,           SignalMast::DIVMASK_ALL_DIVERGING, ASPECT_RED,       ASPECT_FL_RED,    ASPECT_OFF       },	
 	{ INDICATION_APPROACH,              SignalMast::DIVMASK_ALL_DIVERGING, ASPECT_RED,       ASPECT_YELLOW,    ASPECT_OFF,      },
 	{ INDICATION_APPROACH_DIVERGING,    SignalMast::DIVMASK_ALL_DIVERGING, ASPECT_RED,       ASPECT_YELLOW,    ASPECT_OFF,      },
 
@@ -44,6 +48,7 @@ const static IndicationRule_t doubleHead4IndicationWesternUS[] =
 const static IndicationRule_t doubleHead4IndicationEasternUS[] = 
 {
 	{ INDICATION_STOP,                  SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_RED,       ASPECT_RED,       ASPECT_OFF       },
+	{ INDICATION_RESTRICTING,           SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_FL_RED,    ASPECT_RED,       ASPECT_OFF       },	
 	{ INDICATION_APPROACH,              SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_YELLOW,    ASPECT_RED,       ASPECT_OFF       },
 	{ INDICATION_APPROACH_DIVERGING,    SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_YELLOW,    ASPECT_GREEN,     ASPECT_OFF       },
 	{ INDICATION_ADVANCE_APPROACH,      SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_YELLOW,    ASPECT_YELLOW,    ASPECT_OFF       },
@@ -51,6 +56,7 @@ const static IndicationRule_t doubleHead4IndicationEasternUS[] =
 	{ INDICATION_CLEAR,                 SignalMast::DIVMASK_NOT_DIVERGING, ASPECT_GREEN,     ASPECT_RED,       ASPECT_OFF       },
 
 	{ INDICATION_STOP,                  SignalMast::DIVMASK_ALL_DIVERGING, ASPECT_RED,       ASPECT_RED,       ASPECT_OFF       },
+	{ INDICATION_RESTRICTING,           SignalMast::DIVMASK_ALL_DIVERGING, ASPECT_RED,       ASPECT_FL_RED,    ASPECT_OFF       },	
 	{ INDICATION_APPROACH,              SignalMast::DIVMASK_ALL_DIVERGING, ASPECT_RED,       ASPECT_YELLOW,    ASPECT_OFF       },
 	{ INDICATION_APPROACH_DIVERGING,    SignalMast::DIVMASK_ALL_DIVERGING, ASPECT_RED,       ASPECT_YELLOW,    ASPECT_OFF       },
 
@@ -94,6 +100,9 @@ void SignalMast::setDefaultSignalRules()
 	this->singleHeadRuleLen = sizeof(singleHead4Indication) / sizeof(IndicationRule_t);
 	this->doubleHeadRules = doubleHead4IndicationWesternUS;
 	this->doubleHeadRuleLen = sizeof(doubleHead4IndicationWesternUS) / sizeof(IndicationRule_t);
+	this->tripleHeadRules = tripleHead4Indication;
+	this->tripleHeadRuleLen = sizeof(tripleHead4Indication) / sizeof(IndicationRule_t);
+
 }
 
 void SignalMast::setSingleHeadRules(const IndicationRule_t* indicationRules, uint16_t indicationRulesLen)
@@ -124,9 +133,6 @@ SignalMast::SignalMast(SignalHead* h1, SignalHead* h2, SignalHead* h3)
 
 void SignalMast::setIndication(MSSPort& port, DivergingRoute_t diverging, bool mastLit)
 {
-	if (NOT_SPECIFIED == diverging)
-		diverging =  port.getDivergingOut()?DIVERGING_FULL_SPEED:NOT_DIVERGING;
-
 	this->setIndication(port.indicationReceivedGet(), diverging, mastLit);
 }
 
@@ -141,10 +147,10 @@ void SignalMast::setIndication(MSSPortIndication_t indication, DivergingRoute_t 
 	{
 		rulesLen = this->singleHeadRuleLen;
 		rulesPtr = this->singleHeadRules;
-	} else if (NULL != h1 && NULL != h2 && NULL == h3) {
+	} else if (NULL != this->h1 && NULL != this->h2 && NULL == this->h3) {
 		rulesLen = this->doubleHeadRuleLen;
 		rulesPtr = this->doubleHeadRules;
-	} else if (NULL != h1 && NULL != h2 && NULL != h3) {
+	} else if (NULL != this->h1 && NULL != this->h2 && NULL != this->h3) {
 		rulesLen = this->tripleHeadRuleLen;
 		rulesPtr = this->tripleHeadRules;
 	} else {

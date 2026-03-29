@@ -48,7 +48,7 @@ void setup()
   //  becomes it's own object.  By passing that to the xcade, it can then switch the mux to talk
   //  to the correct board
 
-  wireMux.begin(&Wire);
+  wireMux.begin(&Wire, XCADE_I2C_MUX_RESET);
 
   // Start up the xcade board.  
   //  This is the master board, on the same PCB as the host processor.  If you had additional xcade boards, you would

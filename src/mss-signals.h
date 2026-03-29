@@ -12,9 +12,9 @@ class SignalHead {
 		SignalHead();
 		void setAspect(SignalAspect_t aspect);
 		SignalAspect_t getAspect();
+		const char* getAspectText();
 		void setSignalHeadType(SignalHeadType_t headType);
 		void setSignalHeadPolarity(SignalPolarity_t headPolarity);
-
 		uint8_t getConfigByte();
 		static const uint8_t OPTION_COMMON_CATHODE = 0x80;
 		static const uint8_t OPTION_COMMON_ANODE   = 0x40;

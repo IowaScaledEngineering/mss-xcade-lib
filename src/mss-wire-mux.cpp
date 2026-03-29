@@ -30,7 +30,7 @@ void WireMux::reset()
 		// Set the I2C mux reset line low for 10ms 
 		pinMode(this->resetPin, OUTPUT);
 		digitalWrite(this->resetPin, LOW);
-		delay(5);
+		delayMicroseconds(50);
 		digitalWrite(this->resetPin, HIGH);
 	}
 }

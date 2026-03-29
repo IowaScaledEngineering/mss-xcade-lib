@@ -14,7 +14,7 @@ class SignalMast
 		void setSingleHeadRules(const IndicationRule_t* indicationRules, uint16_t indicationRulesLen);
 		void setDoubleHeadRules(const IndicationRule_t* indicationRules, uint16_t indicationRulesLen);
 
-		void setIndication(MSSPort& port, DivergingRoute_t diverging = NOT_SPECIFIED, bool mastLit = true);
+		void setIndication(MSSPort& port, DivergingRoute_t diverging = NOT_DIVERGING, bool mastLit = true);
 		void setIndication(MSSPortIndication_t indication, DivergingRoute_t diverging = NOT_DIVERGING, bool mastLit = true);
 
 		const static uint8_t DIVMASK_NOT_DIVERGING  = (1<<NOT_DIVERGING);
