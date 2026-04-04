@@ -27,6 +27,7 @@ class MSSPort {
   
 		void getRawOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out);
 		void setRawInputs(bool S_in, bool A_in, bool AA_in, bool DA_in);
+		void getRawInputs(bool* S_in, bool* A_in, bool* AA_in, bool* DA_in);
 
 		bool getDivergingOut();
 		bool getSingleBlockApproach();

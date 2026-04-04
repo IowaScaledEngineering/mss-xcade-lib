@@ -114,6 +114,22 @@ void MSSPort::getRawOutputs(bool* S_out, bool* A_out, bool* AA_out, bool* DA_out
 	}
 }
 
+void MSSPort::getRawInputs(bool* S_in, bool* A_in, bool* AA_in, bool* DA_in)
+{
+	if (NULL != S_in)
+		*S_in = this->S_in();
+
+	if (NULL != A_in)
+		*A_in = this->A_in();
+
+	if (NULL != AA_in)
+		*AA_in = this->AA_in();
+
+	if (NULL != DA_in)
+		*DA_in = this->DA_in() && !this->DA_mask();
+	return;
+}
+
 void MSSPort::updateInputs(uint8_t mssRawInputsBitmask)
 {
 	this->debouncedInputs.debounce(mssRawInputsBitmask);
