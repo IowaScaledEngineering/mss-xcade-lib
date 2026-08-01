@@ -83,6 +83,17 @@ bool PCA9555::read(uint8_t pin, bool useCached)
 	return  (this->read(useCached) & mask)?true:false;
 }
 
+uint8_t PCA9555::refreshDirection()
+{
+	if (NULL == this->wire)
+		return 4; // same as "other error" from endTransmission
+	this->wire->beginTransmission(this->addr);
+	this->wire->write(PCA9555_REG_DIRECTION0);
+	this->wire->write(this->dir & 0xFF);
+	this->wire->write((this->dir>>8) & 0xFF);
+	return (uint8_t)this->wire->endTransmission();  
+}
+
 
 uint8_t PCA9555::setDirection(uint16_t dir)
 {

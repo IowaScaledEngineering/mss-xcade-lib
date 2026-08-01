@@ -3,6 +3,7 @@
 
 #include "debounce.h"
 #include "pca9555.h"
+#include "digitalDelay.h"
 
 #include "mss-typedefs.h"
 #include "mss-port.h"
@@ -30,6 +31,7 @@ class XCade {
 
 		bool begin(TwoWire* wire = &Wire);
 		bool begin(WireMux* wireMux, uint8_t muxID=0);
+		bool begin(XCade* masterXcade, uint8_t muxID);
 		void updateInputs();
 		void updateOutputs();
 

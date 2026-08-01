@@ -117,6 +117,11 @@ void SignalMast::setDoubleHeadRules(const IndicationRule_t* indicationRules, uin
 	this->doubleHeadRuleLen = indicationRulesLen;
 }
 
+void SignalMast::setTripleHeadRules(const IndicationRule_t* indicationRules, uint16_t indicationRulesLen)
+{
+	this->tripleHeadRules = indicationRules;
+	this->tripleHeadRuleLen = indicationRulesLen;
+}
 
 void SignalMast::addSignalHeads(SignalHead* h1, SignalHead* h2, SignalHead* h3)
 {
@@ -131,9 +136,20 @@ SignalMast::SignalMast(SignalHead* h1, SignalHead* h2, SignalHead* h3)
 	this->addSignalHeads(h1, h2, h3);
 }
 
+void SignalMast::setIndication(MSSPort& port, bool mastLit)
+{
+	this->setIndication(port.indicationReceivedGet(), NOT_DIVERGING, mastLit);
+}
+
 void SignalMast::setIndication(MSSPort& port, DivergingRoute_t diverging, bool mastLit)
 {
 	this->setIndication(port.indicationReceivedGet(), diverging, mastLit);
+}
+
+
+void SignalMast::setIndication(MSSPortIndication_t indication, bool mastLit)
+{
+	this->setIndication(indication, NOT_DIVERGING, mastLit);
 }
 
 void SignalMast::setIndication(MSSPortIndication_t indication, DivergingRoute_t diverging, bool mastLit)

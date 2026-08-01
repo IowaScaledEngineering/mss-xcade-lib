@@ -23,6 +23,15 @@ bool XCade::begin(WireMux* wireMux, uint8_t muxID)
 	return this->beginCommon();
 }
 
+bool XCade::begin(XCade* masterXcade, uint8_t muxID)
+{
+	if (muxID < 1)
+		return false;
+	this->wireMux = masterXcade->wireMux;
+	this->muxID = muxID;
+	return this->beginCommon();
+}
+
 
 bool XCade::beginCommon()
 {
@@ -62,13 +71,12 @@ void XCade::updateInputs()
 
 	this->wireMux->setPort(this->muxID);
 
+	this->ioexDriverAB.refreshDirection();
 	uint16_t i = this->ioexDriverAB.read();
-
-//	Serial.printf("IOEX AB - 0x%04x\n", i);
-
 	this->mssPortA.updateInputs(i & 0x0F);
 	this->mssPortB.updateInputs((i>>8) & 0x0F);
 
+	this->ioexDriverCD.refreshDirection();
 	i = this->ioexDriverCD.read();
 	this->mssPortC.updateInputs(i & 0x0F);
 	this->mssPortD.updateInputs((i>>8) & 0x0F);
@@ -93,9 +101,11 @@ void XCade::updateOutputs()
 
 	uint16_t i = this->mssPortA.updateOutputs() | ((uint16_t)this->mssPortB.updateOutputs()<<8);
 //  Serial.printf("ioexAB - 0x%04X", i);
-  this->ioexDriverAB.write(i);
+this->ioexDriverAB.refreshDirection();
+this->ioexDriverAB.write(i);
 
 	i = this->mssPortC.updateOutputs() | ((uint16_t)this->mssPortD.updateOutputs()<<8);
+	this->ioexDriverCD.refreshDirection();
 	this->ioexDriverCD.write(i);
 //  Serial.printf("  ioexCD - 0x%04X\n", i);
 

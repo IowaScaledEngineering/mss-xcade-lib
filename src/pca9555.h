@@ -16,6 +16,7 @@ class PCA9555 {
 		uint8_t writeDeferredValues();
 		uint16_t read(bool useCached = false);
 		bool read(uint8_t pin, bool useCached = false);
+		uint8_t refreshDirection();
 		uint8_t setDirection(uint16_t dir);
 		uint8_t setDirection(uint8_t pin, bool isInput);
 		uint8_t reset(uint16_t dir = 0xFFFF, uint16_t out = 0xFFFF);
